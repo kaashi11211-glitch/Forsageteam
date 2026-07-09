@@ -4,10 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For You, Hamna</title>
-    <!-- Animate.css for pro transitions -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
         :root {
             --bg: #060709;
@@ -21,7 +17,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Poppins', 'Georgia', serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -29,21 +25,18 @@
             background-color: var(--bg);
             color: #ffffff;
             overflow-x: hidden;
-            perspective: 1000px;
         }
 
-        /* Sparkle Canvas */
         #sparkle-canvas {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
             z-index: 9999;
         }
 
-        /* Falling Hearts Container */
         #heart-rain {
             position: fixed;
             top: 0;
@@ -60,34 +53,28 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 30px 20px;
+            padding: 40px 20px;
             text-align: center;
-            position: relative;
-        }
-
-        /* Custom Scroll Transition Utility */
-        .reveal {
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 1.2s ease;
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s ease;
         }
 
-        .reveal.active {
+        /* JavaScript updates this to trigger transition */
+        .screen.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
         h1 {
-            font-size: 2.8rem;
-            background: linear-gradient(45deg, var(--accent), var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 25px;
-            font-weight: 700;
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 51, 102, 0.3);
         }
 
         p {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             color: #d1d5db;
             line-height: 1.8;
             max-width: 600px;
@@ -95,20 +82,21 @@
         }
 
         .urdu-quote {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: var(--glow-gold);
-            line-height: 2.4;
+            line-height: 2.2;
             margin: 25px 0;
-            text-shadow: 0 0 15px rgba(223, 183, 108, 0.3);
+            direction: rtl;
         }
 
-        /* Interactive Flip Cards */
+        /* Clickable Cards */
         .card-container {
-            width: 320px;
-            height: 200px;
-            perspective: 1000px;
+            width: 90%;
+            max-width: 340px;
+            height: 220px;
             margin: 20px auto;
             cursor: pointer;
+            perspective: 1000px;
         }
 
         .card-inner {
@@ -116,10 +104,11 @@
             width: 100%;
             height: 100%;
             text-align: center;
-            transition: transform 0.8s;
+            transition: transform 0.6s;
             transform-style: preserve-3d;
         }
 
+        /* JavaScript toggles this class on click */
         .card-container.flipped .card-inner {
             transform: rotateY(180deg);
         }
@@ -128,42 +117,33 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 15px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            border-radius: 15px;
-            padding: 20px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.5);
         }
 
         .card-front {
-            background: linear-gradient(135deg, var(--panel), #1a1f29);
+            background: var(--panel);
             border: 1px solid rgba(223, 183, 108, 0.3);
             color: var(--gold);
         }
 
-        .card-front i {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            color: var(--accent);
-            text-shadow: 0 0 10px var(--accent);
-        }
-
         .card-back {
-            background: linear-gradient(135deg, #1f131a, var(--panel));
+            background: #1f131a;
             border: 1px solid rgba(255, 51, 102, 0.4);
             color: #ffffff;
             transform: rotateY(180deg);
-            font-size: 1.05rem;
         }
 
-        /* Interactive Emoji Grid */
         .emoji-grid {
             display: flex;
-            gap: 20px;
+            gap: 25px;
             margin: 30px 0;
         }
 
@@ -172,38 +152,29 @@
             background: none;
             border: none;
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: transform 0.2s;
         }
 
-        .emoji-btn:hover {
+        .emoji-btn:active {
             transform: scale(1.3);
         }
 
-        /* Action Buttons */
         .btn-pro {
             background: linear-gradient(45deg, var(--accent), #b3002d);
             color: white;
-            padding: 16px 40px;
+            padding: 15px 40px;
             border-radius: 50px;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 1.15rem;
-            border: none;
-            box-shadow: 0 4px 20px rgba(255, 51, 102, 0.4);
-            transition: 0.4s;
+            font-weight: bold;
+            display: inline-block;
             margin-top: 25px;
-        }
-
-        .btn-pro:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 30px rgba(255, 51, 102, 0.7);
+            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.4);
         }
 
         .hint {
             font-size: 0.9rem;
             color: #666;
-            margin-top: 10px;
-            letter-spacing: 1px;
+            margin-top: 15px;
         }
     </style>
 </head>
@@ -212,41 +183,37 @@
     <canvas id="sparkle-canvas"></canvas>
     <div id="heart-rain"></div>
 
-    <!-- Section 1: Intro (Smooth Fade In) -->
-    <div class="screen">
-        <h1 class="animate__animated animate__fadeInDown">Hamna...</h1>
-        <p class="animate__animated animate__fadeInUp animate__delay-1s">Zindagi mein kuch baatein aisi hoti hain jo insaan zuban se nahi keh pata, kyunki darr hota hai ke alfaaz sath chhor denge. Isliye maine yeh safe space sirf tumhare liye design kiya hai.</p>
-        <p class="urdu-quote animate__animated animate__fadeInUp animate__delay-2s">"Suno, tum bohot khaas ho... scroll karte hue har ek lafzo ko mehsoos karna."</p>
-        <div class="hint animate__animated animate__pulse animate__infinite">↓ Neeche scroll karein</div>
+    <!-- Section 1 -->
+    <div class="screen visible">
+        <h1>Hamna...</h1>
+        <p>Zindagi mein kuch baatein aisi hoti hain jo insaan zuban se nahi keh pata, kyunki darr hota hai ke alfaaz sath chhor denge. Isliye maine yeh safe space sirf tumhare liye design kiya hai.</p>
+        <p class="urdu-quote">"Suno, tum bohot khaas ho... scroll karte hue har ek lafzo ko mehsoos karna."</p>
+        <div class="hint">↓ Neeche scroll karein</div>
     </div>
 
-    <!-- Section 2: The Concern & Interactive Cards -->
-    <div class="screen reveal">
+    <!-- Section 2 -->
+    <div class="screen">
         <h1>Mera Sabse Bara Darr</h1>
         <p>Aaj jab tumne mujhe bataya ke us naye larke ne tumse rabta kiya, to mera dil andar se kaamp gaya. Main ek larka hoon Hamna, aur main is jhooti internet ki duniya ko achhi tarah janta hoon...</p>
-        
-        <p style="font-size: 1.1rem; color: #9ca3af; margin-bottom: 30px;">(In cards par click karke dekho jo main tumse chupata raha):</p>
+        <p style="font-size: 1rem; color: #9ca3af;">(In cards par touch karke open karo):</p>
 
-        <!-- Clickable Cards -->
-        <div class="card-container" onclick="flipCard(this)">
+        <div class="card-container" onclick="this.classList.toggle('flipped')">
             <div class="card-inner">
                 <div class="card-front">
-                    <i class="fa-solid fa-eye-slash"></i>
                     <h3>Anjaan Log & Dhoka</h3>
-                    <p class="hint">Click karke open karein</p>
+                    <p class="hint">Touch karke kholein</p>
                 </div>
                 <div class="card-back">
-                    <p>Aaj kal ke larke doosri id bana kar sirf waqt guzarne aur masoomiyat ka faida uthane aate hain. Tum bohot bholi ho Hamna, har kisi par itna jaldi bharosa mat karo. Mera dil kaanp jata hai tumhari fikar mein.</p>
+                    <p>Aaj kal ke larke sirf waqt guzarne aur masoomiyat ka faida uthane aate hain. Tum bohot bholi ho Hamna, har kisi par itna jaldi bharosa mat karo. Mera dil kaanp jata hai tumhari fikar mein.</p>
                 </div>
             </div>
         </div>
 
-        <div class="card-container" onclick="flipCard(this)">
+        <div class="card-container" onclick="this.classList.toggle('flipped')">
             <div class="card-inner">
                 <div class="card-front">
-                    <i class="fa-solid fa-heart-broken"></i>
                     <h3>Mera Haarne Ka Khauf</h3>
-                    <p class="hint">Click karke open karein</p>
+                    <p class="hint">Touch karke kholein</p>
                 </div>
                 <div class="card-back">
                     <p>Main zindagi ki har baazi mein hamesha peeche rehta aaya hoon, har morr par khud ko haarta dekha hai. Par mujh mein ab itni himmat nahi ke main tumhe bhi kho doon. Main ab aur nahi haarna chahta.</p>
@@ -255,16 +222,13 @@
         </div>
     </div>
 
-    <!-- Section 3: Deep Feelings & Emoji Interaction -->
-    <div class="screen reveal">
+    <!-- Section 3 -->
+    <div class="screen">
         <h1>Mera Sach, Meri Qasam</h1>
         <p>Tum mujh se khuda ki qasam le lo... zindagi mein kai larkiyan dekhin, par jo attraction, jo sukoon aur jo sach mene tumme mehsoos kiya hai, wo aaj tak kisi ke liye nahi hua. Meri har fikar, har dua sirf tumse shuru hoti hai.</p>
-        
         <p class="urdu-quote">"Laut aao na meri taraf... kya mera saaf dil tumhare liye kaafi nahi?"</p>
         
-        <p style="font-size: 1.1rem; color: #9ca3af;">(In Emojis par click karke dekho mera dil kya kehta hai):</p>
-        
-        <!-- Emoji Buttons with Javascript Actions -->
+        <p style="font-size: 1rem; color: #9ca3af;">(In Emojis par touch karein):</p>
         <div class="emoji-grid">
             <button class="emoji-btn" onclick="triggerAction('heart')">❤️</button>
             <button class="emoji-btn" onclick="triggerAction('sad')">🥺</button>
@@ -272,38 +236,31 @@
         </div>
     </div>
 
-    <!-- Section 4: Final Connect -->
-    <div class="screen reveal">
+    <!-- Section 4 -->
+    <div class="screen">
         <h1>Faisla Tumhara Hai...</h1>
         <p>Main tum par koi zabardasti ya dabao nahi dalunga. Lekin mera yeh tut-ta hua dil, meri sachi mohabbat hamesha isi morr par tumhara rasta dekhegi.</p>
         <p class="urdu-quote" style="color: var(--accent);">"Mujhe aur mat harao Hamna... main tumse bohot mohabbat karta hoon."</p>
-        
         <a href="https://wa.me/923110057369?text=Hamna%20here.%20Main%20tumhari%20baat%20samajh%20gayi%20hoon..." class="btn-pro">Laut Aao (Talk To Me)</a>
     </div>
 
     <script>
-        /* 1. Scroll Reveal Logic */
-        window.addEventListener('scroll', () => {
-            const reveals = document.querySelectorAll('.reveal');
-            reveals.forEach(reveal => {
-                const windowHeight = window.innerHeight;
-                const elementTop = reveal.getBoundingClientRect().top;
-                const elementVisible = 150;
-                if (elementTop < windowHeight - elementVisible) {
-                    reveal.add('active');
+        /* 1. Instant Mobile Scroll Transition Logic */
+        const screens = document.querySelectorAll('.screen');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('visible');
                 }
             });
-        });
+        }, { threshold: 0.15 });
 
-        /* 2. Interactive Card Flip */
-        function flipCard(card) {
-            card.classList.toggle('flipped');
-        }
+        screens.forEach(screen => observer.observe(screen));
 
-        /* 3. Emoji Click Actions (Heart Rain & Alerts) */
+        /* 2. Emoji Action Functions */
         function triggerAction(type) {
             if (type === 'heart') {
-                for (let i = 0; i < 30; i++) {
+                for (let i = 0; i < 25; i++) {
                     setTimeout(createHeart, i * 100);
                 }
             } else if (type === 'sad') {
@@ -314,60 +271,49 @@
         }
 
         function createHeart() {
-            const heartRain = document.getElementById('heart-rain');
+            const container = document.getElementById('heart-rain');
             const heart = document.createElement('div');
             heart.innerHTML = '❤️';
             heart.style.position = 'absolute';
             heart.style.left = Math.random() * 100 + 'vw';
             heart.style.top = '-5vh';
             heart.style.fontSize = Math.random() * 20 + 20 + 'px';
-            heart.style.opacity = Math.random();
-            heart.style.transform = `rotate(${Math.random() * 360}deg)`;
-            heart.style.transition = 'transform 3s linear, top 3s linear';
-            
-            heartRain.appendChild(heart);
-
-            setTimeout(() => {
-                heart.style.top = '105vh';
-                heart.style.transform = `rotate(${Math.random() * 360}deg) translateX(50px)`;
-            }, 50);
-
-            setTimeout(() => {
-                heart.remove();
-            }, 3200);
+            heart.style.transition = 'top 2.5s linear';
+            container.appendChild(heart);
+            setTimeout(() => { heart.style.top = '105vh'; }, 50);
+            setTimeout(() => { heart.remove(); }, 2600);
         }
 
-        /* 4. Professional Sparkles Canvas Logic (Mobile & Desktop) */
+        /* 3. Screen Touch Sparkles Sparkle Canvas Logic */
         const canvas = document.getElementById('sparkle-canvas');
         const ctx = canvas.getContext('2d');
         let sparkles = [];
 
-        function resizeCanvas() {
+        function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        window.addEventListener('resize', resize);
+        resize();
 
         class Sparkle {
             constructor(x, y) {
                 this.x = x;
                 this.y = y;
-                this.size = Math.random() * 4 + 2;
+                this.size = Math.random() * 5 + 2;
                 this.speedX = Math.random() * 2 - 1;
                 this.speedY = Math.random() * 2 - 1;
-                this.color = Math.random() > 0.5 ? '#ff3366' : '#dfb76c';
                 this.alpha = 1;
             }
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
-                this.alpha -= 0.02;
+                this.alpha -= 0.03;
             }
             draw() {
                 ctx.save();
                 ctx.globalAlpha = this.alpha;
-                ctx.fillStyle = this.color;
+                ctx.fillStyle = '#dfb76c';
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
@@ -375,32 +321,30 @@
             }
         }
 
-        function handlePointer(e) {
+        function addSparkles(e) {
             let x = e.clientX || (e.touches && e.touches[0].clientX);
             let y = e.clientY || (e.touches && e.touches[0].clientY);
-            if(x && y) {
-                for (let i = 0; i < 3; i++) {
-                    sparkles.push(new Sparkle(x, y));
-                }
+            if (x && y) {
+                for(let i=0; i<2; i++) sparkles.push(new Sparkle(x, y));
             }
         }
 
-        window.addEventListener('mousemove', handlePointer);
-        window.addEventListener('touchmove', handlePointer);
+        window.addEventListener('mousemove', addSparkles);
+        window.addEventListener('touchmove', addSparkles);
 
-        function animateSparkles() {
+        function loop() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < sparkles.length; i++) {
+            for(let i=0; i<sparkles.length; i++) {
                 sparkles[i].update();
                 sparkles[i].draw();
-                if (sparkles[i].alpha <= 0) {
+                if(sparkles[i].alpha <= 0) {
                     sparkles.splice(i, 1);
                     i--;
                 }
             }
-            requestAnimationFrame(animateSparkles);
+            requestAnimationFrame(loop);
         }
-        animateSparkles();
+        loop();
     </script>
 </body>
-            </html>
+    </html>
